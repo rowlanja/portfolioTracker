@@ -1,28 +1,27 @@
-from datetime import datetime
+from datetime import datetime, date
+from coinbase.wallet.client import Client
 import csv  
-import requests
 
 
-header = ['ticker', 'entry', 'sl','tp1', 'tp2', 'tp3', '% Gain', 'Profit', 'Datetime']
+
+header = ['ticker', 'entry', 'currentPrice','sl','tp1', 'tp2', 'tp3', '% Gain', 'Profit', 'Datetime']
 positions = []
-coinbase_API_Key = ""
-coinbase_API_Secret = ""
+coinbase_API_key = ""
+coinbase_API_secret = ""
 
 def updateCurrentPrice(position):
     ticker = position[0]
-    response = requests.get('https://api.github.com')
-    if response.status_code == 200:
-        print(response.json())
-        print(ticker + ' price updated')
-    elif response.status_code == 404:
-        print(ticker + 'Ticker Price Not Found.')
+    date = date.today()
+    client = Client(coinbase_API_key, coinbase_API_secret)
+    price = client.get_spot_price(currency_pair= '-USD', date=date)  
+    print(price)
     return position
 
 def createPositions():
     finished = False
     while(not finished ):
         print("ADDING POSITION TO DATABASE")
-        ticker = input("Ticker : ").lower()
+        ticker = input("Ticker : ").upper()
         entry = input("Entry : ")
         sl = input("SL : ")
         tp1 = input("TP1 : ")
@@ -31,7 +30,8 @@ def createPositions():
         time = datetime.now()
         gain = '--:-- %'
         profit = '$ ---.---'
-        positions.add([ticker, entry, sl, tp1, tp2, tp3, gain, profit, time])
+        currentPrice = '$ ---.---'
+        positions.add([ticker, entry, currentPrice, sl, tp1, tp2, tp3, gain, profit, time])
         if(input("Are you finished ? (y/n) : ") == 'y') : finished = True
 
 
