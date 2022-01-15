@@ -3,6 +3,11 @@ import os
 import csv
 from binance.client import Client
   
+header = ['Ticker', 'Entry','Size (ticker)','Margin (USD)','Exit', 'Gain (%)', 'Profit (USD)', 'Datetime', 'Long or Short']
+newPositions = []
+api_key = os.environ.get('binance_api')
+api_secret = os.environ.get('binance_secret')
+
 class Position:
     def __init__(self, ticker, entry, size, exit, lvs, margin):
         self.ticker = ticker
@@ -79,11 +84,7 @@ class Position:
             self.ticker,
             self.lvs
         ]
-    
-header = ['Ticker', 'Entry','Size (ticker)','Margin (usd)','Exit', '% Gain', 'Profit', 'Datetime', 'Long or Short']
-newPositions = []
-api_key = os.environ.get('binance_api')
-api_secret = os.environ.get('binance_secret')
+
 
 def updateCurrentPrice(position):
     ticker = position.getTicker()
@@ -123,5 +124,6 @@ def writePositions():
             position = position.toArr()    
             writer.writerow(position)  
 
-createPositions()
-writePositions()
+def main():
+    createPositions()
+    writePositions()
