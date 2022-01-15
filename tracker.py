@@ -94,9 +94,6 @@ def updateCurrentPrice(position):
     position.setProfit(dollarDifference)
     position.setGain(str(round(dollarDifference/position.getMargin(),5)*100) + "%")
     position.setDatetime(datetime.now())
-    print(currentPrice["price"])
-    print('$ gain', position.getGain())
-    print('$ profit', position.getProfit())
     return position
 
 def createPositions():
